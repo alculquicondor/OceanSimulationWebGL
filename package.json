@@ -1,0 +1,12 @@
+{
+  "name": "ocean",
+  "version": "1.0.0",
+  "description": "An ocean simulation in WebGL",
+  "main": "js/main.js",
+  "author": "Aldo Culquicondor",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-env": "^1.3.3"
+  }
+}

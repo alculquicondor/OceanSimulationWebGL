@@ -1,0 +1,22 @@
+{
+  "name": "Ocean",
+  "authors": [
+    "Aldo Culquicondor <alculquicondor@gmail.com>"
+  ],
+  "description": "An Ocean simulation in WebGL",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "dist",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "gl-matrix": "^2.3.2"
+  }
+}
