@@ -6,3 +6,10 @@
     top: 0;
     margin: 0;
 }
+
+#present-btn {
+    bottom: 5px;
+    position: absolute;
+    right: 5px;
+    display: none;
+}

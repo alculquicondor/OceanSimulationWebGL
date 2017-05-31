@@ -1,10 +1,12 @@
 "use strict";
 
 class Scene {
-    constructor(id) {
-        /* const */ this.DISTANCE = 20;
+    constructor(canvasId, presentBtnId) {
+        /* const */ this.DISTANCE = 20.0;
 
-        this.webglCanvas = document.getElementById(id);
+        this.webglCanvas = document.getElementById(canvasId);
+        this.presentBtn = document.getElementById(presentBtnId);
+        this.vrDisplay = null;
         this.gl = this.webglCanvas.getContext("webgl");
         this.projectionMat = mat4.create();
         this.viewMat = mat4.create();
@@ -15,9 +17,10 @@ class Scene {
             vertexShader: WGLUUrl.getString("vertex", "plain"),
             fragmentShader: WGLUUrl.getString("fragment", "uniform")
         };
-        this.ocean = new Ocean(this.gl, 128, 100.0, options);
+        this.ocean = new Ocean(this.gl, 64, 100.0, options);
 
         this.init();
+        this.initWebVr();
     }
 
     init() {
@@ -27,33 +30,119 @@ class Scene {
         let eye = vec3.create();
         vec3.set(eye, 0, 0, 0);
         let target = vec3.create();
-        vec3.set(target, 0, -this.DISTANCE, -this.DISTANCE);
+        vec3.set(target, 0, -this.DISTANCE / 2.0, -this.DISTANCE);
         let up = vec3.create();
         vec3.set(up, 0, 1, 0);
         mat4.lookAt(this.viewMat, eye, target, up);
     }
 
+    initWebVr() {
+        if (navigator.getVrDisplays) {
+            this.frameData = new VRFrameData();
+
+			navigator.getVRDisplays().then(function (displays) {
+				if (displays.length > 0) {
+					vrDisplay = displays[displays.length - 1];
+					vrDisplay.depthNear = 0.1;
+					vrDisplay.depthFar = 1024.0;
+					if (vrDisplay.capabilities.canPresent) {
+						this.presentBtn.style.display = "block";
+						this.presentBtn.addEventListener("click",
+                                this.onVrRequestPresent.bind(this));
+					}
+					window.addEventListener('vrdisplaypresentchange', onVRPresentChange, false);
+					window.addEventListener('vrdisplayactivate', onVRRequestPresent, false);
+					window.addEventListener('vrdisplaydeactivate', onVRExitPresent, false);
+				} else {
+					console.log("WebVr supported, but no VRDisplays found.");
+				}
+			});
+        } else {
+            console.log("WebVr not supported");
+        }
+    }
+
+    onVrRequestPresent() {
+        this.vrDisplay.requestPresent([{source: this.webglCanvas}]).then(
+                function() {},
+                function (err) {
+                    var errMsg = "requestPresent failed.";
+                    if (err && err.message) {
+                        errMsg += " " + err.message;
+                    }
+                    console.log(errMsg);
+                });
+    }
+
+    onVrExitPresent() {
+        if (!this.vrDisplay.isPresenting)
+            return;
+        this.vrDisplay.exitPresent().then(
+                function() {},
+                function (err) {
+                    var errMsg = "exitPresent failed.";
+                    if (err && err.message) {
+                        errMsg += " " + err.message
+                    }
+                    console.log(errMsg);
+                });
+    }
+
+    onVrPresentChange() {
+        onResize();
+        if (this.vrDisplay.isPresenting) {
+            if (this.vrDisplay.capabilities.hasExternalDisplay) {
+                presentingMessage.style.display = "block";
+            }
+        } else {
+            if (vrDisplay.capabilities.hasExternalDisplay) {
+            }
+        }
+    }
+
     onResize() {
-        this.webglCanvas.width = this.webglCanvas.offsetWidth * window.devicePixelRatio;
-        this.webglCanvas.height = this.webglCanvas.offsetHeight * window.devicePixelRatio;
-        this.gl.viewport(0, 0, this.webglCanvas.width, this.webglCanvas.height);
-        mat4.perspective(this.projectionMat, 2.0, this.webglCanvas.width / this.webglCanvas.height, 0.1, 256.0);
+        if (this.vrDisplay && this.vrDisplay.isPresenting) {
+          let leftEye = vrDisplay.getEyeParameters("left");
+          let rightEye = vrDisplay.getEyeParameters("right");
+          this.webglCanvas.width = Math.max(leftEye.renderWidth, rightEye.renderWidth) * 2;
+          this.webglCanvas.height = Math.max(leftEye.renderHeight, rightEye.renderHeight);
+        } else {
+            this.webglCanvas.width = this.webglCanvas.offsetWidth * window.devicePixelRatio;
+            this.webglCanvas.height = this.webglCanvas.offsetHeight * window.devicePixelRatio;
+        }
     }
 
     onAnimationFrame(time) {
-        window.requestAnimationFrame(this.onAnimationFrame.bind(this));
+        let gl = this.gl;
 
-        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+        gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
         mat4.identity(this.modelMat);
-        mat4.translate(this.modelMat, this.modelMat, [0, -this.DISTANCE, -this.DISTANCE / 4.0]);
-        // mat4.rotateY(this.modelMat, this.modelMat, time / 8000.0);
-        this.ocean.render(this.projectionMat, this.viewMat, this.modelMat, time / 1000.0);
+        mat4.translate(this.modelMat, this.modelMat, [0, -this.DISTANCE, 0]);
+
+        if (this.vrDisplay) {
+            this.vrDisplay.requestAnimationFrame(this.onAnimationFrame.bind(this));
+            if (this.vrDisplay.isPresenting) {
+            } else {
+                gl.viewport(0, 0, this.webglCanvas.width, this.webglCanvas.height);
+                mat4.perspective(this.projectionMat, Math.PI * 0.4,
+                        this.webglCanvas.width / this.webglCanvas.height, 0.1, 1024.0);
+
+            }
+        } else {
+            window.requestAnimationFrame(this.onAnimationFrame.bind(this));
+
+            gl.viewport(0, 0, this.webglCanvas.width, this.webglCanvas.height);
+            mat4.perspective(this.projectionMat, Math.PI * 0.4,
+                    this.webglCanvas.width / this.webglCanvas.height, 0.1, 1024.0);
+            // mat4.rotateY(this.modelMat, this.modelMat, time / 8000.0);
+            this.ocean.render(this.projectionMat, this.viewMat, this.modelMat, time / 1000.0);
+        }
     }
 }
 
 window.onload = function () {
-    let scene = new Scene("webgl-canvas");
+    let scene = new Scene("webgl-canvas", "present-btn");
     scene.onResize();
 
     window.addEventListener("resize", scene.onResize.bind(scene), false);
