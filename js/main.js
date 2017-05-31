@@ -119,12 +119,15 @@ class Scene {
 
         if (this.vrDisplay) {
             this.vrDisplay.requestAnimationFrame(this.onAnimationFrame.bind(this));
+            this.vrDisplay.getFrameData(this.frameData);
+
             if (this.vrDisplay.isPresenting) {
             } else {
                 gl.viewport(0, 0, this.webglCanvas.width, this.webglCanvas.height);
                 mat4.perspective(this.projectionMat, Math.PI * 0.4,
                         this.webglCanvas.width / this.webglCanvas.height, 0.1, 1024.0);
-
+                this.ocean.render(this.projectionMat, this.frameData.leftViewMatrix,
+                        this.modelMat, time / 1000.0);
             }
         } else {
             window.requestAnimationFrame(this.onAnimationFrame.bind(this));
