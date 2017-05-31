@@ -18,7 +18,7 @@ float pow(float b, int t) {
 void main() {
     vec3 materialColor = vec3(0.11, 0.42, 0.63);
     vec3 diffuseLightColor = vec3(0.5, 0.5, 0.5);
-    vec3 specularLightColor = vec3(1.0, 1.0, 1.0);
+    vec3 specularLightColor = vec3(0.5, 0.5, 0.5);
 
     float delta = time * 0.02;
     vec3 n = normalize(texture2D(normalTex,
@@ -33,7 +33,7 @@ void main() {
     vec3 e = normalize(eyeDirection_tangent);
     vec3 r = reflect(-l, n);
     float cosAlpha = clamp(dot(e, r), 0.0, 1.0);
-    vec3 specularColor = materialColor * specularLightColor * pow(cosAlpha, 5.0);
+    vec3 specularColor = materialColor * specularLightColor * pow(cosAlpha, 10.0);
 
     vec3 color = ambientColor + diffuseColor + specularColor;
 

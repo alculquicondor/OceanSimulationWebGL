@@ -16,7 +16,7 @@ float pow(float b, int t) {
 void main() {
     vec3 materialColor = vec3(0.11, 0.42, 0.63);
     vec3 diffuseLightColor = vec3(0.5, 0.5, 0.5);
-    vec3 specularLightColor = vec3(1.0, 1.0, 1.0);
+    vec3 specularLightColor = vec3(0.5, 0.5, 0.5);
 
     vec3 n = normalize(normal_camera);
     vec3 l = normalize(lightDirection_camera);
@@ -35,7 +35,7 @@ void main() {
     if (cosAlpha < 0.0) {
         cosAlpha = 0.0;
     }
-    vec3 specularColor = materialColor * specularLightColor * pow(cosAlpha, 5.0);
+    vec3 specularColor = materialColor * specularLightColor * pow(cosAlpha, 10.0);
 
     vec3 color = ambientColor + diffuseColor + specularColor;
 
