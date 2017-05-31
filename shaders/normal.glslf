@@ -17,8 +17,8 @@ float pow(float b, int t) {
 
 void main() {
     vec3 materialColor = vec3(0.11, 0.42, 0.63);
-    vec3 diffuseLightColor = vec3(0.4, 0.4, 0.4);
-    vec3 specularLightColor = vec3(0.6, 0.6, 0.6);
+    vec3 diffuseLightColor = vec3(0.5, 0.5, 0.5);
+    vec3 specularLightColor = vec3(0.2, 0.2, 0.2);
 
     float delta = time * 0.02;
     vec3 n = normalize(texture2D(normalTex,
