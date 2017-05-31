@@ -42,17 +42,17 @@ class Scene {
 
 			navigator.getVRDisplays().then(function (displays) {
 				if (displays.length > 0) {
-					vrDisplay = displays[displays.length - 1];
-					vrDisplay.depthNear = 0.1;
-					vrDisplay.depthFar = 1024.0;
-					if (vrDisplay.capabilities.canPresent) {
+					this.vrDisplay = displays[displays.length - 1];
+					this.vrDisplay.depthNear = 0.1;
+					this.vrDisplay.depthFar = 1024.0;
+					if (this.vrDisplay.capabilities.canPresent) {
 						this.presentBtn.style.display = "block";
 						this.presentBtn.addEventListener("click",
                                 this.onVrRequestPresent.bind(this));
 					}
-					window.addEventListener('vrdisplaypresentchange', onVRPresentChange, false);
-					window.addEventListener('vrdisplayactivate', onVRRequestPresent, false);
-					window.addEventListener('vrdisplaydeactivate', onVRExitPresent, false);
+					window.addEventListener('vrdisplaypresentchange', this.onVrPresentChange.bind(this), false);
+					window.addEventListener('vrdisplayactivate', this.onVrRequestPresent.bind(this), false);
+					window.addEventListener('vrdisplaydeactivate', onVrExitPresent, false);
 				} else {
 					console.log("WebVr supported, but no VRDisplays found.");
 				}
@@ -91,12 +91,9 @@ class Scene {
     onVrPresentChange() {
         onResize();
         if (this.vrDisplay.isPresenting) {
-            if (this.vrDisplay.capabilities.hasExternalDisplay) {
-                presentingMessage.style.display = "block";
-            }
+            this.presentBtn.style.display = "none";
         } else {
-            if (vrDisplay.capabilities.hasExternalDisplay) {
-            }
+            this.presentBtn.style.display = "block";
         }
     }
 
