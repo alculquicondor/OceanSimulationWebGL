@@ -125,7 +125,7 @@ class Scene {
                 gl.viewport(0, 0, this.webglCanvas.width * 0.5, this.webglCanvas.height);
                 this.ocean.render(this.projectionMat, this.frameData.leftViewMatrix,
                         this.modelMat, time / 1000.0);
-                gl.viewport(this.webglCanvas.width * 0.5, 0, this.webglCanvas.width * 0.5, thsi.webglCanvas.height);
+                gl.viewport(this.webglCanvas.width * 0.5, 0, this.webglCanvas.width * 0.5, this.webglCanvas.height);
                 this.ocean.render(this.projectionMat, this.frameData.rightViewMatrix,
                         this.modelMat, time / 1000.0);
                 this.vrDisplay.submitFrame();
