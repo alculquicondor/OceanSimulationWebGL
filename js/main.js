@@ -37,7 +37,7 @@ class Scene {
     }
 
     initWebVr() {
-        if (navigator.getVrDisplays) {
+        if (navigator.getVRDisplays) {
             this.frameData = new VRFrameData();
 
 			navigator.getVRDisplays().then(function (displays) {

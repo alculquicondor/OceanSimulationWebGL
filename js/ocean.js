@@ -152,7 +152,7 @@ class Ocean {
             gl.uniform4fv(this.waves, this.wavesData);
         }
         if (this.lightWorld !== undefined) {
-            gl.uniform3f(this.lightWorld, 60.0, 2000.0, -20.0);
+            gl.uniform3f(this.lightWorld, 60.0, 1000.0, -20.0);
         }
         if (this.texture !== undefined && this.normalTex !== undefined) {
             gl.activeTexture(gl.TEXTURE0);
