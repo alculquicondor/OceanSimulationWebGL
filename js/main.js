@@ -40,7 +40,7 @@ class Scene {
         if (navigator.getVRDisplays) {
             this.frameData = new VRFrameData();
 
-			navigator.getVRDisplays().then(function (displays) {
+			navigator.getVRDisplays().then((function(displays) {
 				if (displays.length > 0) {
 					this.vrDisplay = displays[displays.length - 1];
 					this.vrDisplay.depthNear = 0.1;
@@ -52,11 +52,11 @@ class Scene {
 					}
 					window.addEventListener('vrdisplaypresentchange', this.onVrPresentChange.bind(this), false);
 					window.addEventListener('vrdisplayactivate', this.onVrRequestPresent.bind(this), false);
-					window.addEventListener('vrdisplaydeactivate', onVrExitPresent, false);
+					window.addEventListener('vrdisplaydeactivate', this.onVrExitPresent.bind(this), false);
 				} else {
 					console.log("WebVr supported, but no VRDisplays found.");
 				}
-			});
+			}).bind(this));
         } else {
             console.log("WebVr not supported");
         }
