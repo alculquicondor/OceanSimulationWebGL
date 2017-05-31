@@ -40,6 +40,11 @@ class Ocean {
         this.program.attachShaderSourceFromXHR("shaders/" + options.fragmentShader + ".glslf",
             gl.FRAGMENT_SHADER).then(this.onCompile.bind(this));
 
+        if (options.fragmentShader === "normal") {
+            let textureLoader = new WGLUTextureLoader(gl);
+            this.texture = textureLoader.loadTexture("textures/normal.png");
+        }
+
         this.vertexBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
         let vertexData = this.getVertexData();
@@ -66,7 +71,8 @@ class Ocean {
         this.V = this.program.uniform["V"];
         this.waves = this.program.uniform["waves"];
         this.time = this.program.uniform["time"];
-        this.light_world = this.program.uniform["light_world"];
+        this.lightWorld = this.program.uniform["light_world"];
+        this.normalTex = this.program.uniform["normalTex"];
 
         this.ready = true;
     }
@@ -136,8 +142,13 @@ class Ocean {
         if (this.waves !== undefined) {
             gl.uniform4fv(this.waves, this.wavesData);
         }
-        if (this.light_world !== undefined) {
-            gl.uniform3f(this.light_world, 10.0, 50.0, -10.0);
+        if (this.lightWorld !== undefined) {
+            gl.uniform3f(this.lightWorld, 20.0, 80.0, -20.0);
+        }
+        if (this.texture !== undefined && this.normalTex !== undefined) {
+            gl.activeTexture(gl.TEXTURE0);
+            gl.uniform1i(this.normalTex, 0);
+            gl.bindTexture(gl.TEXTURE_2D, this.texture);
         }
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
