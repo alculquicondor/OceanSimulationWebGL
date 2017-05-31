@@ -123,10 +123,10 @@ class Scene {
 
             if (this.vrDisplay.isPresenting) {
                 gl.viewport(0, 0, this.webglCanvas.width * 0.5, this.webglCanvas.height);
-                this.ocean.render(this.projectionMat, this.frameData.leftViewMatrix,
+                this.ocean.render(this.frameData.leftProjectionMatrix, this.frameData.leftViewMatrix,
                         this.modelMat, time / 1000.0);
                 gl.viewport(this.webglCanvas.width * 0.5, 0, this.webglCanvas.width * 0.5, this.webglCanvas.height);
-                this.ocean.render(this.projectionMat, this.frameData.rightViewMatrix,
+                this.ocean.render(this.frameData.rightProjectionMatrix, this.frameData.rightViewMatrix,
                         this.modelMat, time / 1000.0);
                 this.vrDisplay.submitFrame();
             } else {
@@ -142,7 +142,6 @@ class Scene {
             gl.viewport(0, 0, this.webglCanvas.width, this.webglCanvas.height);
             mat4.perspective(this.projectionMat, Math.PI * 0.4,
                     this.webglCanvas.width / this.webglCanvas.height, 0.1, 1024.0);
-            // mat4.rotateY(this.modelMat, this.modelMat, time / 8000.0);
             this.ocean.render(this.projectionMat, this.viewMat, this.modelMat, time / 1000.0);
         }
     }
