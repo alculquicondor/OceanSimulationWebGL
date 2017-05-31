@@ -89,7 +89,7 @@ class Scene {
     }
 
     onVrPresentChange() {
-        onResize();
+        this.onResize();
         if (this.vrDisplay.isPresenting) {
             this.presentBtn.style.display = "none";
         } else {
@@ -99,8 +99,8 @@ class Scene {
 
     onResize() {
         if (this.vrDisplay && this.vrDisplay.isPresenting) {
-          let leftEye = vrDisplay.getEyeParameters("left");
-          let rightEye = vrDisplay.getEyeParameters("right");
+          let leftEye = this.vrDisplay.getEyeParameters("left");
+          let rightEye = this.vrDisplay.getEyeParameters("right");
           this.webglCanvas.width = Math.max(leftEye.renderWidth, rightEye.renderWidth) * 2;
           this.webglCanvas.height = Math.max(leftEye.renderHeight, rightEye.renderHeight);
         } else {
