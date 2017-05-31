@@ -122,6 +122,13 @@ class Scene {
             this.vrDisplay.getFrameData(this.frameData);
 
             if (this.vrDisplay.isPresenting) {
+                gl.viewport(0, 0, this.webglCanvas.width * 0.5, this.webglCanvas.height);
+                this.ocean.render(this.projectionMat, this.frameData.leftViewMatrix,
+                        this.modelMat, time / 1000.0);
+                gl.viewport(this.webglCanvas.width * 0.5, 0, this.webglCanvas.width * 0.5, thsi.webglCanvas.height);
+                this.ocean.render(this.projectionMat, this.frameData.rightViewMatrix,
+                        this.modelMat, time / 1000.0);
+                this.vrDisplay.submitFrame();
             } else {
                 gl.viewport(0, 0, this.webglCanvas.width, this.webglCanvas.height);
                 mat4.perspective(this.projectionMat, Math.PI * 0.4,
