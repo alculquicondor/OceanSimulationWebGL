@@ -31,12 +31,13 @@ void main() {
     vec3 bitangent = normalize(vec3(1, xp, 0));
     vec3 normal = cross(tangent, bitangent);
 
-    vec3 position_camera = (V * M * vec4(position, 1)).xyz;
+	mat4 MV = V * M;
+    vec3 position_camera = (MV * vec4(position, 1)).xyz;
     eyeDirection_camera = vec3(0, 0, 0) - position_camera;
     vec3 light_camera = (V * vec4(light_world, 1)).xyz;
 
     lightDirection_camera = light_camera + eyeDirection_camera;
-    normal_camera = (V * M * vec4(normal, 0)).xyz;
+    normal_camera = (MV * vec4(normal, 0)).xyz;
     gl_Position = MVP * vec4(position, 1);
     UV = vertexUV;
 }
