@@ -2,7 +2,7 @@
 
 class Scene {
     constructor(canvasId, presentBtnId) {
-        /* const */ this.DISTANCE = 40.0;
+        /* const */ this.DISTANCE = 80.0;
 
         this.webglCanvas = document.getElementById(canvasId);
         this.presentBtn = document.getElementById(presentBtnId);
