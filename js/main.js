@@ -15,7 +15,7 @@ class Scene {
             vertexShader: WGLUUrl.getString("vertex", "plain"),
             fragmentShader: WGLUUrl.getString("fragment", "uniform")
         };
-        this.ocean = new Ocean(this.gl, 128, 1000.0, options);
+        this.ocean = new Ocean(this.gl, 128, 100.0, options);
 
         this.init();
     }

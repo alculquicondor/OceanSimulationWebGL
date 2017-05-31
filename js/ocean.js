@@ -2,7 +2,6 @@
 
 class Ocean {
     constructor(gl, nRows, tileSize, options) {
-        /* const */ this.EXPANSION = 1.4;
         /* const */ this.wavesData = new Float32Array([
             0.504, -1.571,	0.225, 0.1,
             0.484, -1.190,	0.202, 3.21,
@@ -78,8 +77,10 @@ class Ocean {
     }
 
     getPosition(i) {
-        let x = i / this.nRows - 0.5;
-        return Math.sign(x) * this.tileSize * Math.pow(Math.abs(x), this.EXPANSION);
+        let x = (i / this.nRows - 0.5) * 2.0;
+        let s = Math.sign(x);
+        x = Math.abs(x);
+        return s * this.tileSize * (Math.pow(x * 2, 4.0) / 4.0 + x * 2);
     }
 
     getVertexData() {
