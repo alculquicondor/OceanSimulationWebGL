@@ -19,7 +19,7 @@ void main() {
     vec3 materialColor = vec3(0.11, 0.42, 0.63);
     vec3 lightColor = vec3(1.0, 1.0, 1.0);
 
-    float delta = time * 0.04;
+    float delta = time * 0.02;
     vec3 n = normalize(texture2D(normalTex,
                                UV * 40.0 + 10.0 * vec2(sin(delta), cos(delta))).rgb * 2.0 - 1.0);
     vec3 l = normalize(lightDirection_tangent);
@@ -35,8 +35,9 @@ void main() {
     float cosAlpha = clamp(dot(e, r), 0.0, 1.0);
     vec3 specularColor = materialColor * lightColor * pow(cosAlpha, 5.0);
 
-    float strenght = 1.0 - pow(clamp(length(UV - vec2(0.5, 0.5)) * 2.0, 0.0, 1.0), 6.0);
     vec3 color = ambientColor + diffuseColor + specularColor;
+
+    float strenght = 1.0 - pow(clamp(length(UV - vec2(0.5, 0.5)) * 2.0, 0.0, 1.0), 6.0);
     vec3 bgColor = vec3(0.53, 0.81, 0.98);
     gl_FragColor = vec4(color * strenght + bgColor * (1.0 - strenght), 1.0);
 }

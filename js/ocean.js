@@ -1,7 +1,8 @@
 "use strict";
 
 class Ocean {
-    constructor(gl, nRows, nCols, tileSize, options) {
+    constructor(gl, nRows, tileSize, options) {
+        /* const */ this.EXPANSION = 1.4;
         /* const */ this.wavesData = new Float32Array([
             0.504, -1.571,	0.225, 0.1,
             0.484, -1.190,	0.202, 3.21,
@@ -26,10 +27,9 @@ class Ocean {
         ]);
 
         this.nRows = nRows;
-        this.nCols = nCols;
         this.tileSize = tileSize;
         this.lines = options.lines;
-        this.nVertex = (nRows + 1) * (nCols + 1);
+        this.nVertex = (nRows + 1) * (nRows + 1);
         this.gl = gl;
         this.shaderCnt = 0;
         this.ready = false;
@@ -77,15 +77,23 @@ class Ocean {
         this.ready = true;
     }
 
+    getPosition(i) {
+        let x = i / this.nRows - 0.5;
+        return Math.sign(x) * this.tileSize * Math.pow(Math.abs(x), this.EXPANSION);
+    }
+
     getVertexData() {
         let verticesData = [];
+        let width = 2 * this.getPosition(this.nRows);
         for (let i = 0; i <= this.nRows; i++) {
-            for (let j = 0; j <= this.nCols; j++) {
-                verticesData.push(this.tileSize * (i - this.nRows / 2.0));  // x
+            let x = this.getPosition(i);
+            for (let j = 0; j <= this.nRows; j++) {
+                let z = this.getPosition(j);
+                verticesData.push(x);  // x
                 verticesData.push(0);  // y
-                verticesData.push(this.tileSize * (j - this.nCols / 2.0));  // z
-                verticesData.push(i / parseFloat(this.nRows));  // u
-                verticesData.push(j / parseFloat(this.nRows));  // v
+                verticesData.push(z);  // z
+                verticesData.push(x / width + 0.5);  // u
+                verticesData.push(z / width + 0.5);  // v
             }
         }
         return new Float32Array(verticesData);
@@ -94,9 +102,9 @@ class Ocean {
     getIndexData() {
         let indices = [];
         for (let i = 0; i < this.nRows; i++) {
-            let first = i * (this.nCols + 1);
-            let firstNext = (i + 1) * (this.nCols + 1);
-            for (let j = 0; j < this.nCols; j++) {
+            let first = i * (this.nRows + 1);
+            let firstNext = (i + 1) * (this.nRows + 1);
+            for (let j = 0; j < this.nRows; j++) {
                 indices.push(first + j + 1);
                 indices.push(first + j);
                 indices.push(firstNext + j);
@@ -143,7 +151,7 @@ class Ocean {
             gl.uniform4fv(this.waves, this.wavesData);
         }
         if (this.lightWorld !== undefined) {
-            gl.uniform3f(this.lightWorld, 20.0, 80.0, -20.0);
+            gl.uniform3f(this.lightWorld, 60.0, 200.0, -20.0);
         }
         if (this.texture !== undefined && this.normalTex !== undefined) {
             gl.activeTexture(gl.TEXTURE0);

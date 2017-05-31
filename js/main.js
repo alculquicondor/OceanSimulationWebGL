@@ -15,7 +15,7 @@ class Scene {
             vertexShader: WGLUUrl.getString("vertex", "plain"),
             fragmentShader: WGLUUrl.getString("fragment", "uniform")
         };
-        this.ocean = new Ocean(this.gl, 250, 250, 2.0, options);
+        this.ocean = new Ocean(this.gl, 128, 1000.0, options);
 
         this.init();
     }
@@ -46,7 +46,7 @@ class Scene {
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
         mat4.identity(this.modelMat);
-        mat4.translate(this.modelMat, this.modelMat, [0, -this.DISTANCE, -this.DISTANCE]);
+        mat4.translate(this.modelMat, this.modelMat, [0, -this.DISTANCE, -this.DISTANCE / 4.0]);
         // mat4.rotateY(this.modelMat, this.modelMat, time / 8000.0);
         this.ocean.render(this.projectionMat, this.viewMat, this.modelMat, time / 1000.0);
     }

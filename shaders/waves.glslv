@@ -1,6 +1,7 @@
 precision mediump float;
 
 attribute vec3 vertexPosition;
+attribute vec2 vertexUV;
 
 uniform mat4 MVP;
 uniform mat4 V;
@@ -12,6 +13,7 @@ uniform vec3 light_world;
 varying vec3 normal_camera;
 varying vec3 lightDirection_camera;
 varying vec3 eyeDirection_camera;
+varying vec2 UV;
 
 void main() {
     float height = 0.0, xp = 0.0, zp = 0.0, k, g, t;
@@ -36,4 +38,5 @@ void main() {
     lightDirection_camera = light_camera + eyeDirection_camera;
     normal_camera = (V * M * vec4(normal, 0)).xyz;
     gl_Position = MVP * vec4(position, 1);
+    UV = vertexUV;
 }
