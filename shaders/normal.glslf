@@ -21,7 +21,7 @@ void main() {
     vec3 specularLightColor = vec3(0.4, 0.4, 0.4);
 
     float delta = time * 0.02;
-	vec2 uv = UV * 32.0 + vec2(sin(delta), cos(delta));
+	vec2 uv = UV * 32.0 + 4.0 * vec2(sin(delta), cos(delta));
     vec3 n = normalize(texture2D(normalTex, uv).rgb * 2.0 - 1.0);
     vec3 l = normalize(lightDirection_tangent);
 
