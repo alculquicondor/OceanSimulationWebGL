@@ -67,7 +67,7 @@ class Scene {
         this.vrDisplay.requestPresent([{source: this.webglCanvas}]).then(
                 function() {},
                 function (err) {
-                    var errMsg = "requestPresent failed.";
+                    let errMsg = "requestPresent failed.";
                     if (err && err.message) {
                         errMsg += " " + err.message;
                     }
@@ -81,7 +81,7 @@ class Scene {
         this.vrDisplay.exitPresent().then(
                 function() {},
                 function (err) {
-                    var errMsg = "exitPresent failed.";
+                    let errMsg = "exitPresent failed.";
                     if (err && err.message) {
                         errMsg += " " + err.message
                     }
