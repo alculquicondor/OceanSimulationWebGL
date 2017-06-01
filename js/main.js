@@ -18,7 +18,8 @@ class Scene {
             fragmentShader: WGLUUrl.getString("fragment", "normal"),
             texture: WGLUUrl.getString("texture", "normal")
         };
-        this.ocean = new Ocean(this.gl, 64, 100.0, options);
+	let rows = WGLUUrl.getInt("rows", 64);
+        this.ocean = new Ocean(this.gl, rows, 100.0, options);
 
         this.init();
         this.initWebVr();
@@ -67,7 +68,7 @@ class Scene {
         this.vrDisplay.requestPresent([{source: this.webglCanvas}]).then(
                 function() {},
                 function (err) {
-                    var errMsg = "requestPresent failed.";
+                    let errMsg = "requestPresent failed.";
                     if (err && err.message) {
                         errMsg += " " + err.message;
                     }
@@ -81,7 +82,7 @@ class Scene {
         this.vrDisplay.exitPresent().then(
                 function() {},
                 function (err) {
-                    var errMsg = "exitPresent failed.";
+                    let errMsg = "exitPresent failed.";
                     if (err && err.message) {
                         errMsg += " " + err.message
                     }

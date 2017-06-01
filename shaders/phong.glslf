@@ -23,10 +23,7 @@ void main() {
 
     vec3 ambientColor = materialColor * vec3(0.5, 0.5, 0.5);
 
-    float cosTheta = dot(n, l);
-    if (cosTheta < 0.0) {
-        cosTheta = 0.0;
-    }
+    float cosTheta = clamp(dot(n, l), 0.0, 1.0);
     vec3 diffuseColor = materialColor * diffuseLightColor * cosTheta;
 
     vec3 e = normalize(eyeDirection_camera);
