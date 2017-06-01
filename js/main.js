@@ -17,7 +17,8 @@ class Scene {
             vertexShader: WGLUUrl.getString("vertex", "waves2"),
             fragmentShader: WGLUUrl.getString("fragment", "normal")
         };
-        this.ocean = new Ocean(this.gl, 64, 100.0, options);
+	let rows = WGLUUrl.getInt("rows", 64);
+        this.ocean = new Ocean(this.gl, rows, 100.0, options);
 
         this.init();
         this.initWebVr();
