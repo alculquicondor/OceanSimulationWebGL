@@ -41,7 +41,11 @@ class Ocean {
 
         if (options.fragmentShader === "normal") {
             let textureLoader = new WGLUTextureLoader(gl);
-            this.texture = textureLoader.loadTexture("textures/normal.png");
+            this.texture = textureLoader.loadTexture("textures/"
+                + options.texture + ".png");
+            gl.bindTexture(gl.TEXTURE_2D, this.texture);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
         }
 
         this.vertexBuffer = gl.createBuffer();

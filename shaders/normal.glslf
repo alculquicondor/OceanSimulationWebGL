@@ -1,4 +1,4 @@
-precision mediump float;
+precision highp float;
 
 varying vec2 UV;
 varying vec3 lightDirection_tangent;
@@ -21,8 +21,8 @@ void main() {
     vec3 specularLightColor = vec3(0.4, 0.4, 0.4);
 
     float delta = time * 0.02;
-    vec3 n = normalize(texture2D(normalTex,
-                               UV * 40.0 + 10.0 * vec2(sin(delta), cos(delta))).rgb * 2.0 - 1.0);
+	vec2 uv = UV * 32.0 + 4.0 * vec2(sin(delta), cos(delta));
+    vec3 n = normalize(texture2D(normalTex, uv).rgb * 2.0 - 1.0);
     vec3 l = normalize(lightDirection_tangent);
 
     vec3 ambientColor = materialColor * vec3(0.5, 0.5, 0.5);

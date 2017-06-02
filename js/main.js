@@ -15,7 +15,8 @@ class Scene {
         let options = {
             lines: WGLUUrl.getBool("lines", false),
             vertexShader: WGLUUrl.getString("vertex", "waves2"),
-            fragmentShader: WGLUUrl.getString("fragment", "normal")
+            fragmentShader: WGLUUrl.getString("fragment", "normal"),
+            texture: WGLUUrl.getString("texture", "normal")
         };
 	let rows = WGLUUrl.getInt("rows", 80);
         this.ocean = new Ocean(this.gl, rows, 100.0, options);
