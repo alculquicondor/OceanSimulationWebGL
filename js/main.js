@@ -2,7 +2,7 @@
 
 class Scene {
     constructor(canvasId, presentBtnId) {
-        /* const */ this.DISTANCE = 80.0;
+        /* const */ this.DISTANCE = 40.0;
 
         this.webglCanvas = document.getElementById(canvasId);
         this.presentBtn = document.getElementById(presentBtnId);
@@ -17,7 +17,7 @@ class Scene {
             vertexShader: WGLUUrl.getString("vertex", "waves2"),
             fragmentShader: WGLUUrl.getString("fragment", "normal")
         };
-	let rows = WGLUUrl.getInt("rows", 64);
+	let rows = WGLUUrl.getInt("rows", 80);
         this.ocean = new Ocean(this.gl, rows, 100.0, options);
 
         this.init();
